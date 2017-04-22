@@ -114,8 +114,6 @@ func (id *OpenId) ValidateAndGetId() (string, error) {
 		return "", err
 	}
 
-	log.Println(string(content))
-
 	response := strings.Split(string(content), "\n")
 	if response[0] != "ns:"+openId_ns {
 		return "", errors.New("Wrong ns in the response.")

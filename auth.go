@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+	"crypto/tls"
 )
 
 var (
@@ -62,15 +63,15 @@ func (id OpenId) AuthUrl() string {
 	}
 
 	i := 0
-	url := steam_login + "?"
+	path := steam_login + "?"
 	for key, value := range data {
-		url += key + "=" + value
+		path += key + "=" + value
 		if i != len(data)-1 {
-			url += "&"
+			path += "&"
 		}
 		i++
 	}
-	return url
+	return path
 }
 
 func (id *OpenId) ValidateAndGetId() (string, error) {
@@ -94,7 +95,15 @@ func (id *OpenId) ValidateAndGetId() (string, error) {
 	}
 	params.Set("openid.mode", "check_authentication")
 
-	resp, err := http.PostForm(steam_login, params)
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
+	client := &http.Client{
+		Transport: tr,
+	}
+	resp, err := client.PostForm(steam_login, params)
 	if err != nil {
 		return "", err
 	}

@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strings"
 	"crypto/tls"
-	"log"
 )
 
 var (

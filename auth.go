@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 	"crypto/tls"
+	"log"
 )
 
 var (
@@ -112,6 +113,8 @@ func (id *OpenId) ValidateAndGetId() (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	log.Println(string(content))
 
 	response := strings.Split(string(content), "\n")
 	if response[0] != "ns:"+openId_ns {
